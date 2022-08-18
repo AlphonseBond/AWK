@@ -1,0 +1,10 @@
+Nétoyage du fichier afin de supprimer les caractères non-imprimables en trop:
+tr -cd '\11\12\15\40-\176' < file-with-binary-chars > clean-file
+(voir http://www.man-linux-magique.net/man1/tr.html)
+
+Les caractères conservé seront :
+octal 11: tab
+octal 12: linefeed
+octal 15: carriage return
+octal 40 through octal 176: all the "good" keyboard characters 
+
