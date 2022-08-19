@@ -1,35 +1,60 @@
 #! /usr/bin/awk
 
+# Les données dans le fichierListeFichiersImages.txt sont organisé ainsi:
+# $1: Le type de fichier et Les autorisations de fichier. ([-|d]([-|r][-|w][-|x]){3})
+# $2: Nombre de liens durs vers le fichier (toujours 1).
+# $3: Propriétaire de fichier (toujours 'TO45610').
+# $4: Groupe utilisateur (toujours '1049089').
+# $5: Taille du fichier en octet
+# $6: Mois de la date (mmmm.).
+# $7: Date du jour (dd)
+# $8: Heure si la date est en 2022 (hh:mm) ou année de la date (yyyy) 
+# $9: Nom de fichier.
+
+
 BEGIN {
     print "Début du traitement";
 	FOLDER_ROOT = "Vide";
+    FOLDER_NAME = "";
 	FOLDER_ROOT_LENGTH = 0;
+    STRING_LENGTH = 0;
 	tab_Folder[0]= "";
 	tab_Date[0] = "";
-	# tab_Heure[0] = "";
-	# tab_Taille[0] = "";
-	# tab_Nom[0] = "";
+	tab_Heure[0] = "";
+	tab_Mois[0] = "";
+	tab_Year[0] = "";
+	tab_Taille[0] = "";
+	tab_Nom[0] = "";
 	tab_Type[0] = "";
-	tab_Length[0] = "";
-	tab_Ligne[0] = "";
+	#tab_Length[0] = "";
+	#tab_Ligne[0] = "";
 	tab_Num_Ligne[0] = 0;
 	i = 0;
 	j = 0;
 	FS = "[[:space:]]+";
 }
-# Dans les séquence -a--- et d--- il y a des caractères invisible entre chaque lettre
-#awk 'NR<200 && $1 ~ /-.*a/ || $1 ~ /d.*-/  {print NR, ":", $0}' ../Documents/ListeImages.txt 
-$0 ~ / *R[^:]+/ {if (FOLDER_ROOT == "Vide") {
+# Dans les séquence -a--- et d--- il y a des caractères invisible entre chaque lettre mais le fichier à été régénérer à patir de cmde linux (depuis git bash) et ces caractères on disparue.
+#identification des répertoires
+$1 ~ /^\..*:/ {
+#    if (FOLDER_ROOT == "Vide") {
 	#FOLFER_ROOT = gensub("/ *R[^:]+ (.+)/","\\1","g",$0);
-        FOLDER_ROOT = $0;
-	FOLDER_ROOT_LENGTH = length(FOLDER_ROOT);
-    } else {
-	tab_Folder[i] = substr($0,FOLDER_ROOT_LENGTH)
+    STRING_LENGTH = length($1);
+    FOLDER_NAME = substr($1,1,STRING_LENGTH-2); # Récupération du nom du répertoire
 	i++;
-	j = 0;}
+	#FOLDER_ROOT_LENGTH = length(FOLDER_ROOT);
+#    } else {
+#	tab_Folder[i] = substr($0,FOLDER_ROOT_LENGTH)
+#	i++;
+#	j = 0;}
+}
+
+# Identification de la taille du répertoire courant
+$1 ~ /^total \d+/{
+    STRING_LENGTH = length($1);
+    
 }
 #Essai avec split($0,/[[space]]/,tab,seps) avec bouclage sur tab pour remplir les champ (! il es possible qu'il y ai des caractères cachés dans les blanc
-$1 ~ /d(.?-){5}/ {
+$1 ~ /^(-|d)[-rwx]{9}/ {
     tab_Folder[i+j] = tab_Folder[i];
     tab_Length[i+j] = length($0);
     tab_Ligne[i+j] = $0;
