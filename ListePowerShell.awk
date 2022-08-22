@@ -62,6 +62,7 @@ $1 ~ /^(-|d)[-rwx]{9}/ {
     tab_Date[i] = $7;
     tab_Heure[i] = $8;
     tab_Nom[i] = $9;
+# Modifier en fonction de la liste date full-iso
     if (match(tab_Heure[i],/[:digit:]d{4}/) != 0) {
         tab_Year[i] = tab_Heure[i];
         tab_Heure[i] = "";
