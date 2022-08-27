@@ -14,15 +14,16 @@
 BEGIN {
     i = 0;
     j = 0;
-    FX = " | "; # 
+    FS = "|"; 
 }
 
-# Il s'agit des répertoire à créer, les stocker dans un tableau
+# La liste des répertoire à copier vont etre stocker dans le tableau tab_Rep
 $1 ~ /\./ && $2 ~ /d/ {
-    tab_Rep[i] = $9;
+    tab_Rep[i] = $8;
     i++;
 }
 
+#La liste des fichiers à recopier vont etre stocker dans 8 tableaux diférents
 $1 ~ /\.\/.+/ && $2 ~ /-/ {
     tab_Rep[j] = $1;
     tab_Nom[j] = $8;
@@ -32,9 +33,10 @@ $1 ~ /\.\/.+/ && $2 ~ /-/ {
     tab_Taille[j] = $6;
     tab_Date[j] = $7;
 }
+
 END {
-    Destination = "D:\\Images\\";
-    Origine = "C:\\Users\\TO45610\\Download\\";
+    Destination = "/media/marc/PHILIPS\ UFD"
+    Origine = "/home/marc/Documents/RecupDataZBook";
 # Création des répertoires sous le chemin destination
     Limit = length(tab_Rep);
      for (i = 0 ; i< Limit; i++) {
