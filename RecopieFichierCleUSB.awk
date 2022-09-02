@@ -19,7 +19,7 @@ BEGIN {
 
 # La liste des répertoire à copier vont etre stocker dans le tableau tab_Rep
 $1 ~ /\./ && $2 ~ /d/ {
-    tab_Rep[i] = $8;
+     tab_Rep[i] =gensub(/ *([^ ]+)/,"\\1","g", $8); #supprime l'espace de vant le nom de répertoire
     i++;
 }
 
@@ -35,13 +35,14 @@ $1 ~ /\.\/.+/ && $2 ~ /-/ {
 }
 
 END {
-    Destination = "/media/marc/PHILIPS\ UFD"
+    Destination = "/media/marc/PHILIPS\\ UFD"; # rajout d'un '\' supplémentaire pour échaper l'autre '\'
     Origine = "/home/marc/Documents/RecupDataZBook";
 # Création des répertoires sous le chemin destination
     Limit = length(tab_Rep);
      for (i = 0 ; i< Limit; i++) {
-        test = system("mkdir " Origine tab_Nom[i] Destination tab)
-        if (test) {
+	 Cmd = "mkdir " Destination tab_Rep[i];
+	 test = system(Cmd);
+	 if (test) {
             test = system("chown " tab_Auth[i] );
             if (!test) {
                 print "On ne peut modifier les authorisation concernant", tab_Nom[i];
