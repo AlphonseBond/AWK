@@ -36,7 +36,7 @@ $1 ~ /\.\/.+/ && $2 ~ /-/ {
 }
 
 END {
-    Destination = "/media/marc/PHILIPS\\ UFD/Pictures"; # rajout d'un '\' supplémentaire pour échaper l'autre '\'
+    Destination = "/media/marc/PHILIPS\\ UFD/"; # rajout d'un '\' supplémentaire pour échaper l'autre '\'
     Origine = "/home/marc/Documents/RecupDataZBook";
 # Création des répertoires sous le chemin destination
     Limit = length(tab_RepCreat);
